@@ -25,7 +25,7 @@ async function run() {
    await functions.addLabelToIssue(issueID, scRequestedLabledID)
 
     //Get Issue Title
-    const issueInfo = await getIssueInfo(issueID)
+    const issueInfo = await functions.getIssueInfo(issueID)
     const requestedIssueID = core.getInput('requestedIssueID')
 
     // Add Comment to Requested Issue
