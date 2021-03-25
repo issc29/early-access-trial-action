@@ -8,109 +8,118 @@ const scRequestedLabledID = core.getInput('requestedLabelID');
 const payload = github.context.payload
 const issueID = payload.client_payload.command.resource.id
   
-const addCommentMutation = `mutation addComment($issueId: ID!, $commentBody: String!){ 
-  addComment(input:{subjectId: $issueId , body: $commentBody}) {
-    commentEdge {
-      node {
-        id
-      }
-    }
-    }
-  }`;
-  
-  const addLabelMutation = `mutation addLabel($issueId: ID!, $labelId: [ID!]!){ 
-  addLabelsToLabelable(input:{labelIds:$labelId, labelableId:$issueId}){
-    labelable {
-      ... on Issue {
-        id
-      }
-    }
-  }
-}`;
-
-const getIssueInfo = `query($issueId: ID!) { 
-  node(id:$issueId) {
-    ... on Issue {
-      title,
-      number
-    }
-  }
-}`;
-
 
 run();
 
 async function run() {
 
-  const comment = dedent`
-    Early Access Name: ${payload.client_payload.data['Early Access Name']}
-    * Is this an existing customer or prospect? ${payload.client_payload.data['Briefed of Functionality?']}
-    * [Prospect] Have they been briefed on the functionality of Security Center today? ${payload.client_payload.data['Existing GHAS Customer?']}
-    * [Prospect] Is Security Center critical to the success of the POC? ${payload.client_payload.data['Critical to POC?']}
-    * [Prospect] Comments: ${payload.client_payload.data['Comments']}
-    
-    Next steps: Needs approval by @niroshan or @issc29`
-
   try {
 
     // Add Comment to current Issue
-    const commentVariables = {
-      issueId: issueID,
-      commentBody: comment,
-    }
-    const commentResult = await octokit.graphql(addCommentMutation, commentVariables)
-    if (!commentResult) {
-      core.setFailed('GraphQL request failed')
-    } 
-    else {
-      console.log(`Added Comment to Issue nodeId: ${commentResult.addComment.commentEdge.node.id}`)
-    } 
+    const currentIssueComment = getCurrentIssueComment(payload.client_payload.data)
+    await commentOnIssue(issueID, currentIssueComment)
 
     // Add Label to current Issue
-    const labelVariables = {
-      issueId: issueID,
-      labelId: scRequestedLabledID
-    }
-    const labelResult = await octokit.graphql(addLabelMutation, labelVariables)
-    if (!labelResult) {
-      core.setFailed('GraphQL request failed')
-    } 
-    else {
-      console.log(`Added Label to Issue: issueID, nodeId: ${labelResult.addLabelsToLabelable.labelable.id}`)
-    } 
+   await addLabelToIssue(issueID, scRequestedLabledID)
 
     //Get Issue Title
-    const getIssueInfoVariables = {
-      issueId: issueID
-    }
-    const getIssueInfoResult = await octokit.graphql(getIssueInfo, getIssueInfoVariables)
-    if (!getIssueInfoResult) {
-      core.setFailed('GraphQL request failed')
-    } 
-    else {
-      console.log(`Title: ${getIssueInfoResult.node.title}`)
-    } 
-
+    const issueInfo = await getIssueInfo(issueID)
     const requestedIssueID = core.getInput('requestedIssueID')
 
     // Add Comment to Requested Issue
-
-    const requestIssueComment = dedent`
-    New Early Access Request: ${getIssueInfoResult.node.title} #${getIssueInfoResult.node.number}`
-
-    const requestedIssueCommentVariables = {
-      issueId: requestedIssueID,
-      commentBody: requestIssueComment,
-    }
-    const requestedIssueCommentResult = await octokit.graphql(addCommentMutation, requestedIssueCommentVariables)
-    if (!requestedIssueCommentResult) {
-      core.setFailed('GraphQL request failed')
-    } 
-    else {
-      console.log(`Added Comment to Issue nodeId: ${requestedIssueCommentResult.addComment.commentEdge.node.id}`)
-    } 
+    const requestIssueComment = getRequestIssueComment(issueInfo)
+    await commentOnIssue(requestedIssueID, requestIssueComment)
 
   } catch (error) {
     core.setFailed(error.message);
   }
+}
+
+
+function getCurrentIssueComment(payloadData){
+  return dedent`
+    Early Access Name: ${payloadData['Early Access Name']}
+    * Is this an existing customer or prospect? ${payloadData['Briefed of Functionality?']}
+    * [Prospect] Have they been briefed on the functionality of Security Center today? ${payloadData['Existing GHAS Customer?']}
+    * [Prospect] Is Security Center critical to the success of the POC? ${payloadData['Critical to POC?']}
+    * [Prospect] Comments: ${payloadData['Comments']}
+    
+    Next steps: Needs approval by @niroshan or @issc29`
+}
+
+function getRequestIssueComment(issueInfo){
+  return dedent`
+    New Early Access Request: ${issueInfo.title} #${issueInfo.number}`
+}
+
+async function commentOnIssue(issueID, comment) {
+  const addCommentMutation = `mutation addComment($issueId: ID!, $commentBody: String!){ 
+    addComment(input:{subjectId: $issueId , body: $commentBody}) {
+      commentEdge {
+        node {
+          id
+        }
+      }
+      }
+    }`;
+
+  const variables = {
+    issueId: issueID,
+    commentBody: comment,
+  }
+  const result = await octokit.graphql(addCommentMutation, variables)
+  if (!result) {
+    core.setFailed('GraphQL request failed')
+  } 
+
+  return result
+}
+
+
+async function getIssueInfo(issueID) {
+  const getIssueInfoQuery = `query($issueId: ID!) { 
+    node(id:$issueId) {
+      ... on Issue {
+        title,
+        number
+      }
+    }
+  }`;
+
+  const variables = {
+    issueId: issueID
+  }
+  const result = await octokit.graphql(getIssueInfoQuery, variables)
+  if (!result) {
+    core.setFailed('GraphQL request failed')
+  } 
+  else {
+    console.log(`Title: ${result.node.title}`)
+  } 
+  return result.node
+}
+
+async function addLabelToIssue(issueID, labelID) {
+  const addLabelMutation = `mutation addLabel($issueId: ID!, $labelId: [ID!]!){ 
+    addLabelsToLabelable(input:{labelIds:$labelId, labelableId:$issueId}){
+      labelable {
+        ... on Issue {
+          id
+        }
+      }
+    }
+  }`;
+
+  const variables = {
+    issueId: issueID,
+    labelId: labelID
+  }
+  const result = await octokit.graphql(addLabelMutation, variables)
+  if (!result) {
+    core.setFailed('GraphQL request failed')
+  } 
+  else {
+    console.log(`Added Label: nodeId: ${result.addLabelsToLabelable.labelable.id}`)
+  } 
+  return result.addLabelsToLabelable.labelable
 }
