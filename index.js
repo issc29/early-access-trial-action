@@ -63,7 +63,7 @@ async function run() {
       core.setFailed('GraphQL request failed')
     } 
     else {
-      console.log(`Added Comment to Issue: issueID, nodeId: ${commentResult.addComment.commentEdge.node.id}`)
+      console.log(`Added Comment to Issue nodeId: ${commentResult.addComment.commentEdge.node.id}`)
     } 
 
     // Add Label to current Issue
@@ -102,12 +102,12 @@ async function run() {
       issueId: requestedIssueID,
       commentBody: requestIssueComment,
     }
-    const requestedIssueResult = await octokit.graphql(addCommentMutation, requestedIssueCommentVariables)
-    if (!requestedIssueResult) {
+    const requestedIssueCommentResult = await octokit.graphql(addCommentMutation, requestedIssueCommentVariables)
+    if (!requestedIssueCommentResult) {
       core.setFailed('GraphQL request failed')
     } 
     else {
-      console.log(`Added Label to Issue: issueID, nodeId: ${requestedIssueResult.addLabelsToLabelable.labelable.id}`)
+      console.log(`Added Comment to Issue nodeId: ${requestedIssueCommentResult.addComment.commentEdge.node.id}`)
     } 
 
   } catch (error) {
