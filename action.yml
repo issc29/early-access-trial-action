@@ -7,7 +7,6 @@ inputs:
   requestedLabelID:  
     description: 'Label ID for security-center-requested label'
     required: true
-outputs:
 runs:
   using: 'node12'
   main: 'index.js'
