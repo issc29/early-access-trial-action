@@ -4,8 +4,8 @@ const dedent = require('dedent');
 
 const myToken = core.getInput('github-token');
 const octokit = github.getOctokit(myToken)
-const approve = core.getInput('approve');
 const scRequestedLabledID = core.getInput('requestedLabelID');
+const payload = github.context.payload
 const issueID = payload.client_payload.command.resource.id
   
 const addCommentMutation = `mutation addComment($issueId: ID!, $commentBody: String!){ 
