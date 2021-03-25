@@ -4,6 +4,9 @@ inputs:
   github-token:  # id of input
     description: 'Token to use'
     required: true
+  requestedLabelID:  
+    description: 'Label ID for "security-center-requested"'
+    required: true
 outputs:
 runs:
   using: 'node12'
