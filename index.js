@@ -64,8 +64,6 @@ try {
     console.log(`Added Label to Issue: issueID, nodeId: ${labelResult.addLabelsToLabelable.labelable.id}`)
   } 
 
-
-
 } catch (error) {
   core.setFailed(error.message);
 }
