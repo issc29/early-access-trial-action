@@ -88,7 +88,7 @@ async function run() {
       core.setFailed('GraphQL request failed')
     } 
     else {
-      console.log(`Title: ${getIssueInfo.node.title}`)
+      console.log(`Title: ${getIssueInfoResult.node.title}`)
     } 
 
     const requestedIssueID = core.getInput('requestedIssueID')
@@ -96,7 +96,7 @@ async function run() {
     // Add Comment to Requested Issue
 
     const requestIssueComment = dedent`
-    New Early Access Request: ${getIssueInfo.node.title} #${getIssueInfo.node.number}`
+    New Early Access Request: ${getIssueInfoResult.node.title} #${getIssueInfoResult.node.number}`
 
     const requestedIssueCommentVariables = {
       issueId: requestedIssueID,
