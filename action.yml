@@ -5,7 +5,7 @@ inputs:
     description: 'Token to use'
     required: true
   requestedLabelID:  
-    description: 'Label ID for "security-center-requested"'
+    description: 'Label ID for security-center-requested label'
     required: true
 outputs:
 runs:
