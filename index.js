@@ -1,3 +1,5 @@
+import dedent from "dedent";
+
 const core = require('@actions/core');
 const github = require('@actions/github');
 
@@ -13,7 +15,7 @@ async function run() {
 
     const issueID = payload.client_payload.command.resource.id
 
-    const comment = `
+    const comment = dedent`
     Early Access Name: ${payload.client_payload.data['Early Access Name']}
       * Is this an existing customer or prospect? ${payload.client_payload.data['Briefed of Functionality?']}
       * [Prospect] Have they been briefed on the functionality of Security Center today? ${payload.client_payload.data['Existing GHAS Customer?']}
