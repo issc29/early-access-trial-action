@@ -8,7 +8,7 @@ try {
   const scRequestedLabledID = core.getInput('requestedLabelID');
   const issueID = "a"
 
-  console.log(github.event.payload)
+  console.log(github.context.payload)
 
 
 
