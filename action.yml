@@ -1,15 +1,10 @@
 name: 'Early Access POC Action'
 description: 'Creates a process around to enable early-access programs for trials'
 inputs:
-  myToken:  # id of input
+  github-token:  # id of input
     description: 'Token to use'
     required: true
-  requestedLabelID:  
-    description: 'Label ID for "security-center-requested"'
-    required: true
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
 runs:
   using: 'node12'
   main: 'index.js'

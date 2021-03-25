@@ -2,7 +2,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 
 try {
-  const myToken = core.getInput('myToken');
+  const myToken = core.getInput('github-token');
   const octokit = github.getOctokit(myToken)
 
   const scRequestedLabledID = core.getInput('requestedLabelID');
