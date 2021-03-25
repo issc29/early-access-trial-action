@@ -14,12 +14,13 @@ async function run() {
     const issueID = payload.client_payload.command.resource.id
 
     const comment = `
-      Early Access Name: ${payload.client_payload.data['Early Access Name']}
+    Early Access Name: ${payload.client_payload.data['Early Access Name']}
       * Is this an existing customer or prospect? ${payload.client_payload.data['Briefed of Functionality?']}
       * [Prospect] Have they been briefed on the functionality of Security Center today? ${payload.client_payload.data['Existing GHAS Customer?']}
       * [Prospect] Is Security Center critical to the success of the POC? ${payload.client_payload.data['Critical to POC?']}
       * [Prospect] Comments: ${payload.client_payload.data['Comments']}
-        Next steps: Needs approval by @niroshan or @issc29`
+        
+    Next steps: Needs approval by @niroshan or @issc29`
       
     const addCommentMutation = `mutation addComment($issueId: ID!, $commentBody: String!){ 
       addComment(input:{subjectId: $issueId , body: $commentBody}) {
