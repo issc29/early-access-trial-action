@@ -11,7 +11,7 @@ async function run() {
     const scRequestedLabledID = core.getInput('requestedLabelID');
     const payload = github.context.payload
 
-    const issueID = JSON.parse(payload.client_payload.command.resource.id)
+    const issueID = payload.client_payload.command.resource.id
 
     const comment = `
       Early Access Name: ${payload.client_payload.data['Early Access Name']}
