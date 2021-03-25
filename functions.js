@@ -19,9 +19,9 @@ module.exports = class functions {
       issueId: issueID,
       commentBody: comment,
     }
-    const result = await octokit.graphql(addCommentMutation, variables)
+    const result = await this.octokit.graphql(addCommentMutation, variables)
     if (!result) {
-      core.setFailed('GraphQL request failed')
+      this.core.setFailed('GraphQL request failed')
     } 
 
     return result
@@ -41,9 +41,9 @@ module.exports = class functions {
     const variables = {
       issueId: issueID
     }
-    const result = await octokit.graphql(getIssueInfoQuery, variables)
+    const result = await this.octokit.graphql(getIssueInfoQuery, variables)
     if (!result) {
-      core.setFailed('GraphQL request failed')
+      this.core.setFailed('GraphQL request failed')
     } 
     else {
       console.log(`Title: ${result.node.title}`)
@@ -66,9 +66,9 @@ module.exports = class functions {
       issueId: issueID,
       labelId: labelID
     }
-    const result = await octokit.graphql(addLabelMutation, variables)
+    const result = await this.octokit.graphql(addLabelMutation, variables)
     if (!result) {
-      core.setFailed('GraphQL request failed')
+      this.core.setFailed('GraphQL request failed')
     } 
     else {
       console.log(`Added Label: nodeId: ${result.addLabelsToLabelable.labelable.id}`)
