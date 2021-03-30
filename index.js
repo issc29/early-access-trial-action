@@ -62,7 +62,7 @@ function getRequestIssueComment(issueInfo){
     New Early Access Request: ${issueInfo.title} #${issueInfo.number}`
 }
 
-function commentIfShipped(issueID, shipped, payloadData) {
+async function commentIfShipped(issueID, shipped, payloadData) {
     const shippedComment = getShippedComment(payloadData)
     await functions.commentOnIssue(issueID, shippedComment)
 }
