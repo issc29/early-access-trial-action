@@ -8,8 +8,11 @@ inputs:
     description: 'Label ID for security-center-requested label'
     required: true
   requestedIssueID:
-      description: 'Issue ID to post requests'
+      description: 'Issue ID to record requests'
       required: true
+  shipped:
+    description: Did the Alpha ship? [true|false]
+    default: false
 runs:
   using: 'node12'
   main: 'index.js'

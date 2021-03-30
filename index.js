@@ -5,6 +5,7 @@ const dedent = require('dedent');
 const myToken = core.getInput('github-token');
 const octokit = github.getOctokit(myToken)
 const scRequestedLabledID = core.getInput('requestedLabelID');
+const shipped = core.getInput('shipped');
 const payload = github.context.payload
 const issueID = payload.client_payload.command.resource.id
 
@@ -15,7 +16,14 @@ run();
 
 async function run() {
 
+  if(shipped) {
+    commentIfShipped(issueID, shipped, payload.client_payload.data)
+    return
+  }
+  
   try {
+
+    
 
     // Add Comment to current Issue
     const currentIssueComment = getCurrentIssueComment(payload.client_payload.data)
@@ -53,3 +61,13 @@ function getRequestIssueComment(issueInfo){
   return dedent`
     New Early Access Request: ${issueInfo.title} #${issueInfo.number}`
 }
+
+function commentIfShipped(issueID, shipped, payloadData) {
+    const shippedComment = getShippedComment(payloadData)
+    await functions.commentOnIssue(issueID, shippedComment)
+}
+
+function getShippedComment(payloadData){
+  return dedent`${payloadData['Early Access Name']} Early Access has shipped and is currently available!`
+}
+
