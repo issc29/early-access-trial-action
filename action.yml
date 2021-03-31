@@ -12,6 +12,7 @@ inputs:
       required: true
   shipped:
     description: Did the Alpha ship? [true|false]
+    required: false
     default: false
 runs:
   using: 'node12'
