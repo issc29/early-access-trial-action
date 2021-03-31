@@ -9,7 +9,7 @@ const shipped = core.getInput('shipped');
 const payload = github.context.payload
 const issueID = payload.client_payload.command.resource.id
 
-const functionsLib = require('./functions');
+const functionsLib = require('actions-api-functions');
 var functions = new functionsLib(octokit, core)
 
 run();
