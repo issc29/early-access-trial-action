@@ -15,15 +15,12 @@ var functions = new functionsLib(octokit, core)
 run();
 
 async function run() {
-console.log(Boolean(shipped))
   if(shipped == 'true') {
     commentIfShipped(issueID, shipped, payload.client_payload.data)
     return
   }
   
   try {
-
-    
 
     // Add Comment to current Issue
     const currentIssueComment = getCurrentIssueComment(payload.client_payload.data)
@@ -68,6 +65,6 @@ async function commentIfShipped(issueID, shipped, payloadData) {
 }
 
 function getShippedComment(payloadData){
-  return dedent`${payloadData['Early Access Name']} Early Access has shipped and is currently available!`
+  return dedent`${payloadData['Early Access Name']} has shipped and is currently available!`
 }
 
