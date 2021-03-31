@@ -16,7 +16,7 @@ run();
 
 async function run() {
 console.log(shipped)
-  if(shipped) {
+  if(Boolean(shipped)) {
     commentIfShipped(issueID, shipped, payload.client_payload.data)
     return
   }
