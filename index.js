@@ -15,9 +15,7 @@ var functions = new functionsLib(octokit, core)
 run();
 
 async function run() {
-  console.log(shipped)
   if(shipped == 'true') {
-    console.log(shipped)
     commentIfShipped(issueID, shipped, payload.client_payload.data)
     return
   }
