@@ -48,7 +48,7 @@ function getCurrentIssueComment(payloadData){
     Early Access Name: ${payloadData['Early Access Name']}
     * Is this an existing customer or prospect? ${payloadData['Briefed of Functionality?']}
     * Have they been briefed on the functionality of ${payloadData['Early Access Name']} today? ${payloadData['Existing GHAS Customer?']}
-    * Is ${payloadData['Early Access Name']} a critical need? ${payloadData['Critical to POC?']}
+    * Is ${payloadData['Early Access Name']} a critical need? ${payloadData['Critical?']}
     * Are they willing to provide feedback for this Beta? ${payloadData['Feedback']}
     * Comments: ${payloadData['Comments']}
     
