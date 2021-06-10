@@ -47,9 +47,10 @@ function getCurrentIssueComment(payloadData){
   return dedent`
     Early Access Name: ${payloadData['Early Access Name']}
     * Is this an existing customer or prospect? ${payloadData['Briefed of Functionality?']}
-    * [Prospect] Have they been briefed on the functionality of Security Center today? ${payloadData['Existing GHAS Customer?']}
-    * [Prospect] Is Security Center critical to the success of the POC? ${payloadData['Critical to POC?']}
-    * [Prospect] Comments: ${payloadData['Comments']}
+    * Have they been briefed on the functionality of ${payloadData['Early Access Name']} today? ${payloadData['Existing GHAS Customer?']}
+    * Is ${payloadData['Early Access Name']} a critical need? ${payloadData['Critical to POC?']}
+    * Are they willing to provide feedback for this Beta? ${payloadData['Feedback']}
+    * Comments: ${payloadData['Comments']}
     
     Next steps: Needs approval by @niroshan or @issc29`
 }
